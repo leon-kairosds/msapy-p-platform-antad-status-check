@@ -3,3 +3,7 @@ target
 /target
 target/
 /target/
+/.settings/
+/.classpath
+/.factorypath
+/.project
