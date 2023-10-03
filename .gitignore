@@ -1,2 +1,5 @@
 # Ignora la carpeta target
 target
+/target
+target/
+/target/
