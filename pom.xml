@@ -5,7 +5,7 @@
 	<groupId>com.bancoppel.platform.antad.status.check</groupId>
 	<artifactId>msapy-p-platform-antad-status-check</artifactId>
 	<version>B-0.0.1-01</version>
-	<name>msapy-p-platform-antad-status-check</name>
+	<name>msapy-p-platform-antad-status-check</name>    
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
