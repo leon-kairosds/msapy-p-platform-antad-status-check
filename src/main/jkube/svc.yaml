@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: @project.artifactId@-actuator
+  labels:
+    app: @project.artifactId@
+    type: actuator
+spec:
+  replicas: 1
+  ports:
+    - protocol: TCP
+      port: 8181
+      targetPort: 8181
+  type: ClusterIP
+  selector:
+    app: @project.artifactId@

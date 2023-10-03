@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: msadp-d-deposit-account-detail
+data:
+ application.properties: |-
+   #===================================================================#
+   # Propiedades de tomcat                                             #
+   #===================================================================#
+
+   server.port=8080
+   
+   server.tomcat.accept-count=120
+   server.tomcat.max-connections=360
+   server.tomcat.max-threads=600
+   server.tomcat.min-spare-threads=200
+  
+   #===================================================================#
+   # Propiedades de spring boot                                        #
+   #===================================================================#
+   
+   info.app.name = @project.name@
+   info.app.groupId = @project.groupId@
+   info.app.artifactId = @project.artifactId@
+   info.app.version = @project.version@
+   spring.task.execution.pool.max-size=100
+   spring.task.scheduling.pool.size=30
+   spring.task.execution.pool.core-size=20
+   spring.task.execution.pool.keep-alive=10s
+
+   #===================================================================#
+   # Propiedades de spring actuator                                    #
+   #===================================================================#
+   
+   management.server.port=8181
+   management.endpoints.web.exposure.include=*
+   management.endpoint.health.show-details=always
+   management.health.mongo.enabled=false
+   #management.metrics.enable.jvm=true
+   #management.environment.system.properties=false
+   #management.metrics.distribution.percentiles-histogram.http.server.requests=true
+   #management.metrics.distribution.sla.http.server.requests=1ms,5ms
+   #management.endpoint.shutdown.enabled=true
+   #management.endpoint.prometheus.enabled=true
+   #management.metrics.export.prometheus.enabled=true
+   #management.endpoint.metrics.enabled=true
+   #management.health.db.enabled=false
+
+   #===================================================================#
+   # Propiedades de logueo                                             #
+   #===================================================================#
+
+   logging.pattern.level='[%X{data}%thread] [%X{X-B3-TraceId:-}] - %5p'
+   logging.pattern.console=%p, %d{'yyyy-MM-dd HH:mm:ss,SSS',America/Mexico_City}, %C{1}:%M:%L, %X{mdc.uuid}, %X{mdc.sid} %m%n
+   logging.level.org.springframework.web=INFO
+   logging.level.org.springframework.web.servlet.DispatcherServlet= INFO
+   logging.level.org.springframework.cloud.sleuth= INFO
+   logging.level.com.bancoppel.servicing.check.checking.account=INFO
+   logging.level.com.zaxxer.hikari=INFO
+   logging.level.com.bancoppel.*=INFO
+   
+
+   #===================================================================#
+   # Propiedades del API                                               #
+   #===================================================================#
+   
+   constants.api.uri.basePath=/api/private/v1/serv/antad/
+   constants.api.uri.interceptorPath:/api/private/v1/serv/antad/**
+   api.detail.mapping=/checking/account/retrieve
+   api.card.mapping=/numcard/account/retrieve
+
+
+   #===================================================================#
+   # Propiedades de swagger                                            #
+   #===================================================================#
+
+   constants.swagger.basePackage: com.bancoppel.servicing.deposit.account.detail
+   constants.swagger.title: SERV-D-CheckCheckingAccount
+   constants.swagger.descriptionApi: Obtiene los datos para realizar el pago de servicio con ANTAD.
+   constants.swagger.version: 1.0.0
+   constants.swagger.nameDeveloper: Leon Fernando
+   constants.swagger.contactUrl: https://www.kairosds.com/
+   constants.swagger.label: swagger-ui.html
+   constants.swagger.resourceLocation: classpath:/META-INF/resources/
+   constants.swagger.webjars: /webjars/**
+   constants.swagger.webjarsLocation: classpath:/META-INF/resources/webjars/
+   constants.swagger.emailDeveloper=leon.chavez@kairosds.com
+   spring.mvc.pathmatch.matching-strategy=ant-path-matcher
+   springdoc-use-management-port=true
+
+   #===================================================================#
+   # Externalizacion de errores y variables                            #
+   #===================================================================#
+
+   constants.errorResolver.errorCodes.dataNotFoundException=404
+   constants.errorResolver.errorCodes.badRequestException=400
+   constants.errorResolver.errorCodes.unauthorizedException=401
+   constants.errorResolver.errorCodes.noHandlerFoundException=404
+   constants.errorResolver.messages.unauthorizedText=Falta de credenciales/Credenciales inválidas
+   constants.errorResolver.errorCodes.forbiddenException=000903
+   constants.errorResolver.errorCodes.notValidAppException=000043
+   constants.errorResolver.errorCodes.httpRequestMethodNotSupportedException=400
+   constants.errorResolver.errorCodes.httpMediaTypeNotAcceptableException=400
+   constants.errorResolver.errorCodes.httpMediaTypeNotSupportedException=400
+   constants.errorResolver.errorCodes.servletRequestBindingException=400
+   constants.errorResolver.errorCodes.httpMessageNotReadableException=400
+   constants.errorResolver.errorCodes.methodArgumentNotValidException=400
+   constants.errorResolver.errorCodes.constraintViolationException=400
+   constants.errorResolver.errorCodes.exception=000031
+   constants.errorResolver.errorCodes.hystrixRuntimeException=404
+   constants.errorResolver.errorCodes.microserviceClientException=400
+   constants.errorResolver.errorCodes.externalResourceException=404
+   constants.errorResolver.errorCodes.databaseTimeoutException=408
+   constants.errorResolver.errorCodes.notValidHeadersException=400
+
+   constants.errorResolver.messages.unauthorizedText=Falta de credenciales/Credenciales inválidas
+   constants.errorResolver.messages.notFoundException=El recurso solicitado no ha sido encontrado
+   constants.errorResolver.messages.genericErrorDescription=Error general para excepcion no controlada
+   constants.errorResolver.messages.genericFailureDescription=Consulte la descripción del error en el catálogo correspondiente.
+   constants.errorResolver.messages.legacyErrorLabel="LegacyError :"
+   constants.errorResolver.messages.invalidRequest=Parámetros faltantes/Parámteros inválidos
+   constants.errorResolver.messages.externalResourceException=Ocurrio un error al consultar el servicio externo, intente mas tarde.
+   constants.errorResolver.messages.databaseTimeoutException=Se supero el tiempo maximo de espera en la respuesta de bdisac.
+
+   #Constantes de la aplicacion
+   validate.headers=Accept,Authorization,uuid,Content-Type
+
+   #===================================================================#
+   # Externalizacion de variables del sso                              #
+   #===================================================================#
+
+   #constants.sso.token.client.secret=${REALM_SECRET}
+   #constants.sso.token.client.id=${REALM_CLIENT}
+   constants.sso.token.client.secret=27b476240870def1556c1da6d881d58d
+   constants.sso.token.client.id=ea2aba31
+   constants.sso.token.client.type=client_credentials
+   constants.sso.token.client.max-attempt=2
+
+   #===================================================================#
+   # Externalizacion de variables para cifrado                         #
+   #===================================================================#        
+
+   #===================================================================#
+   # Propiedades del cliente redis                                     #
+   #===================================================================#
+
+   #===================================================================#
+   # Propiedades de mongo                                              #
+   #===================================================================#
+
+   #===================================================================#
+   # Configuracion de persistencia (informix)                          #
+   #===================================================================#
+
+   spring.datasource.driver-class-name=com.informix.jdbc.IfxDriver
+   spring.datasource.url=jdbc:informix-sqli://${INFORMIX_HOST}:${INFORMIX_PORT}/bdicheq:INFORMIXSERVER=${INFORMIX_SERVER};IFX_LOCK_MODE_WAIT=3;IFX_ISOLATION_LEVEL=1;
+   spring.datasource.username=${INFORMIX_USERNAME}
+   spring.datasource.password=${INFORMIX_PASSWORD} 
+   spring.datasource.initialization-mode=always
+   spring.datasource.initialize=true
+   spring.datasource.continue-on-error=true
+
+   spring.jpa.database-platform=org.hibernate.dialect.Informix10Dialect
+   spring.jpa.show-sql=true
+
+   spring.jpa.properties.hibernate.format_sql=true
+   spring.jpa.properties.hibernate.default_schema=informix
+
+   spring.jpa.hibernate.ddl-auto=none
+   spring.jpa.hibernate.naming.implicit-strategy=org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+   spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+   #===================================================================#
+   # Configuracion del Hystrix                                         #
+   #===================================================================#
+
+   hystrix.threadpool.default.allowMaximumSizeToDivergeFromCoreSize=true
+   hystrix.threadpool.default.coreSize=100
+   hystrix.threadpool.default.maxQueueSize=120
+   hystrix.threadpool.default.maximumSize=100
+   hystrix.command.default.execution.isolation.strategy=SEMAPHORE
+   hystrix.command.default.execution.isolation.semaphore.maxConcurrentRequests=120
+   hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=30000
+
+   #===================================================================#
+   # Configuracion de hikari                                           #
+   #===================================================================#
+
+   spring.datasource.type=com.zaxxer.hikari.HikariDataSource
+   spring.datasource.hikari.connection-timeout=30000
+   spring.datasource.hikari.minimum-idle=1
+   spring.datasource.hikari.maximum-pool-size=4
+   spring.datasource.hikari.idle-timeout=3600000
+   spring.datasource.hikari.max-lifetime=1800000
+   spring.datasource.hikari.connection-init-sql=select dbinfo('UTC_TO_DATETIME', sh_curtime) - dbinfo('UTC_TO_DATETIME', sh_boottime) from sysmaster:sysshmvals
+   spring.datasource.hikari.connection-test-query=select dbinfo('UTC_TO_DATETIME', sh_curtime) - dbinfo('UTC_TO_DATETIME', sh_boottime) from sysmaster:sysshmvals
+
+   #===================================================================#
+   # Propiedades cliente SSO                                           #
+   #===================================================================#
+
+
+
+ 
+
+
