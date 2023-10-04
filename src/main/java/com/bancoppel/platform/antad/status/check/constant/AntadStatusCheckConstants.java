@@ -33,6 +33,14 @@ public class AntadStatusCheckConstants {
 	 */
 	public static final String LOG_CHECK_STATUS_ANTAD_CONTROLLER = "Post getAntadStatusCheckService";
 	/**
+	 * Descripcion.
+	 */
+	public static final String LOG_PAYMENT_ONLINE_CONTROLLER = "Post getPaymentOnlineResponse";
+	/**
+	 * Descripcion.
+	 */
+	public static final String LOG_CONFIRMATION_PAYMENT_CONTROLLER = "Post getConfirmationPaymentResponse";
+	/**
 	 * Constante usada para nombrar el metodo de fallback de negocio.
 	 */
 	public static final String STATUS_FALLBACK = "getAntadStatusCheckServiceFallback";

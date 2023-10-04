@@ -182,6 +182,11 @@ public class Constants {
 	public static final String HEADER_WORD_CONSTANT = "header";
 
 	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_DECIMAL = "Tiene que ser decimal 0 o mayor";
+
+	/**
 	 * Private constructor will prevent the instantiation of this class.
 	 */
 	private Constants() {

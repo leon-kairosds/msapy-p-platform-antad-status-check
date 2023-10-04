@@ -28,7 +28,7 @@ import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
  * @Fecha: May 4, 2023
  * @Empresa: Kairos DS
  */
-public interface IAntadStatusCheckService {
+public interface IAntadConfirmationPaymentService {
 	
-	AntadStatusCheckResponse getAntadStatusCheckService(AntadStatusCheckRequest request);
+	ServicesPaymentResponse sendConfirmationPaymentRequestService(HttpHeaders headers, ServicesPaymentRequest request);
 }

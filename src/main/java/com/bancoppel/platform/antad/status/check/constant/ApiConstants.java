@@ -41,6 +41,16 @@ public class ApiConstants {
 	 */
 	public static final String OPERATION_API = "retrieve-check-status-antad";
 	/**
+	 * Constante usada para representar el nombre de la operacion para obtener todos
+	 * los convenios con ANTAD
+	 */
+	public static final String OPERATION_API_PAYMENT_ONLINE = "send-payment-online";
+	/**
+	 * Constante usada para representar el nombre de la operacion para obtener todos
+	 * los convenios con ANTAD
+	 */
+	public static final String OPERATION_API_CONFIRMATION_PAYMENT = "send-confirmation-payment";
+	/**
 	 * Constante utilizada para mostrar el status code 200.
 	 */
 	public static final int CODE_OK = 200;
@@ -168,6 +178,14 @@ public class ApiConstants {
 	 * Constante utilizada para representar el nombre del header ChannelId.
 	 */
 	public static final String REFRESH_TOKEN = "refresh_token";
+	/**
+	 * Constante que contiene el mensaje a logear de msw Request.
+	 */
+	public static final String LOG_PAYMENT_ONLINE = "SERVICE CALL - [Envio de peticion a payment online]";
+	/**
+	 * Constante que contiene el mensaje a logear de msw Request.
+	 */
+	public static final String LOG_CONFIRMATION_PAYMENT = "SERVICE CALL - [Envio de peticion a confirmation payment]";
 
 	/**
 	 * Swagger configuration Starts here. Application base package.

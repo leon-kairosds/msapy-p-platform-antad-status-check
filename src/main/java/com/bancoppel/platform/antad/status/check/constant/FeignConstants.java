@@ -20,12 +20,30 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableConfigurationProperties
 public class FeignConstants {
-
- 
-  /**
-   * Constante que representa el nombre del feign get payment agreement.
-   */
-  public static final String CATALOG_AGREEMENT_NAME = "${constants.feign.name.getCatalogAgreement}";
+	/**
+	 * Constante que representa la URL del feign send messaging notification.
+	 */
+	public static final String PAYMENT_ONLINE_URL = "${constants.feign.url.paymentOnline}";
+	/**
+	 * Constante que representa el nombre del feign send messaging notification.
+	 */
+	public static final String PAYMENT_ONLINE_NAME = "${constants.feign.name.paymentOnline}";
+	/**
+	 * Constante que representa el endpoint del feign send messaging notification.
+	 */
+	public static final String PAYMENT_ONLINE_ENDPOINT = "${constants.feign.path.paymentOnline}";
+	/**
+	 * Constante que representa la URL del feign send messaging notification.
+	 */
+	public static final String CONFIRMATION_PAYMENT_URL = "${constants.feign.url.confirmationPayment}";
+	/**
+	 * Constante que representa el nombre del feign send messaging notification.
+	 */
+	public static final String CONFIRMATION_PAYMENT_NAME = "${constants.feign.name.confirmationPayment}";
+	/**
+	 * Constante que representa el endpoint del feign send messaging notification.
+	 */
+	public static final String CONFIRMATION_PAYMENT_ENDPOINT = "${constants.feign.path.confirmationPayment}";
 
  
   /**
