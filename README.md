@@ -1,4 +1,4 @@
-# msadp-d-deposit-account-detail
+# msapy-p-platform-antad-status-check
 
 ## Instrucciones de consumo
 Realizar la petición al servicio
