@@ -34,14 +34,19 @@ import com.bancoppel.platform.antad.status.check.constant.AntadStatusCheckConsta
 import com.bancoppel.platform.antad.status.check.constant.Constants;
 import com.bancoppel.platform.antad.status.check.constant.RoutesConstants;
 import com.bancoppel.platform.antad.status.check.exceptions.ErrorResponse;
+import com.bancoppel.platform.antad.status.check.model.AntadResponse;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
+import com.bancoppel.platform.antad.status.check.model.ConsultaEstatusRequest;
+import com.bancoppel.platform.antad.status.check.model.MessagingNotificationsRequest;
+import com.bancoppel.platform.antad.status.check.model.NotificacionNegativaRequest;
+import com.bancoppel.platform.antad.status.check.model.NotificacionPositivaRequest;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
-import com.bancoppel.platform.antad.status.check.service.IAntadConfirmationPaymentService;
-import com.bancoppel.platform.antad.status.check.service.IAntadPaymentOnlineService;
 import com.bancoppel.platform.antad.status.check.service.feign.IConfirmationPaymentFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IPaymentOnlineFeign;
+import com.bancoppel.platform.antad.status.check.service.feign.IPaymentValidateFeign;
+import com.bancoppel.platform.antad.status.check.service.feign.ISendMessagingNotificationFeign;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -69,14 +74,17 @@ public class AntadStatusCheckTestController {
 	 */
 	@Autowired
 	private IPaymentOnlineFeign paymentOnlineFeign;
-
 	/**
 	 * Inyección de la dependencia {@link checkCheckingAccountService}.
 	 */
 	@Autowired
 	private IConfirmationPaymentFeign confirmationPaymentFeign;
+
+	@Autowired
+	private ISendMessagingNotificationFeign sendMessagingNotificationFeign;
 	
-	
+	@Autowired
+	private IPaymentValidateFeign paymentValidateFeign;
 
 	/**
 	 * Endpoint utilizado para la funcionalidad de consulta de cuenta cheque del
@@ -106,14 +114,9 @@ public class AntadStatusCheckTestController {
 			@Valid @RequestBody ServicesPaymentRequest request) {
 		log.debug(AntadStatusCheckConstants.LOG_PAYMENT_ONLINE_CONTROLLER);
 
-		//return new ResponseEntity<>(paymentOnlineFeign.sendPaymentOnlineRequestService(httpHeaders, request), HttpStatus.OK);
-		return paymentOnlineFeign.sendPaymentOnlineRequest(
-															httpHeaders.getFirst(ApiConstants.AUTHORIZATION), 
-															httpHeaders.getFirst(ApiConstants.UUID), 
-															httpHeaders.getFirst(ApiConstants.ACCEPT), 
-															httpHeaders.getFirst(ApiConstants.DEVICE_ID), 
-															httpHeaders.getFirst(ApiConstants.DEVICE_ID), 
-															request);
+		return paymentOnlineFeign.sendPaymentOnlineRequest(httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID), httpHeaders.getFirst(ApiConstants.DEVICE_ID), request);
 
 	}
 
@@ -124,7 +127,7 @@ public class AntadStatusCheckTestController {
 	 * @param request Objeto de tipo {@link AntadStatusCheckRequest}
 	 * @return ResponseEntity body CheckCheckingAccountResponse object, status ok
 	 */
-	@ApiOperation(value = ApiConstants.OPERATION_API_PAYMENT_ONLINE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = ApiConstants.OPERATION_API_CONFIRMATION_PAYMENT, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiImplicitParams({
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
@@ -139,21 +142,132 @@ public class AntadStatusCheckTestController {
 
 	@PostMapping(value = RoutesConstants.SEND_CONFIRMATION_PAYMENT_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ValidateHeaders
-	public ResponseEntity<ServicesPaymentResponse> getPaymentConfirmation(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
-			@Valid @RequestBody ServicesPaymentRequest request) {
+	public ResponseEntity<ServicesPaymentResponse> getPaymentConfirmation(
+			@RequestHeader @ApiIgnore HttpHeaders httpHeaders, @Valid @RequestBody ServicesPaymentRequest request) {
 		log.debug(AntadStatusCheckConstants.LOG_CONFIRMATION_PAYMENT_CONTROLLER);
 
-		//return new ResponseEntity<>(confirmationPaymentFeign.sendConfirmationPaymentRequestService(httpHeaders, request), HttpStatus.OK);
-		return confirmationPaymentFeign.sendConfirmationPaymentRequest(
-													httpHeaders.getFirst(ApiConstants.AUTHORIZATION), 
-													httpHeaders.getFirst(ApiConstants.UUID), 
-													httpHeaders.getFirst(ApiConstants.ACCEPT), 
-													httpHeaders.getFirst(ApiConstants.DEVICE_ID), 
-													httpHeaders.getFirst(ApiConstants.DEVICE_ID), 
-													request);
+		return confirmationPaymentFeign.sendConfirmationPaymentRequest(httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID), httpHeaders.getFirst(ApiConstants.DEVICE_ID), request);
 	}
 
+	/**
+	 * Endpoint utilizado para la funcionalidad de realizar una transferencia SPEI.
+	 * 
+	 * @param speiTransferRequest request para realizar transferencia.
+	 * @return obejct Response.
+	 */
+	@ApiOperation(value = ApiConstants.OPERATION_API, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(value = { @ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK),
+			@ApiResponse(code = ApiConstants.CODE_BAD_REQUEST, message = ApiConstants.BAD_REQUEST),
+			@ApiResponse(code = ApiConstants.CODE_INTERNAL_ERROR, message = ApiConstants.INTERNAL_ERROR) })
+	@ApiImplicitParams({
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
+	@ValidateHeaders
+	@PostMapping(value = ApiConstants.API_ENDPOINT_MESSAGING_NOTIFICATION)
+	public ResponseEntity<HttpStatus> messagingNotification(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+			@RequestBody @Valid MessagingNotificationsRequest messagingNotificationsRequest) {
+
+		return new ResponseEntity<>(
+				sendMessagingNotificationFeign.sendMessagingNotification(httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+								httpHeaders.getFirst(ApiConstants.UUID), httpHeaders.getFirst(ApiConstants.ACCEPT),
+								httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+								httpHeaders.getFirst(ApiConstants.CHANNEL_ID), messagingNotificationsRequest)
+						.getStatusCode().CREATED);
+	}
 	
+	/**
+	 * Endpoint utilizado para la funcionalidad de realizar una transferencia SPEI.
+	 * 
+	 * @param speiTransferRequest request para realizar transferencia.
+	 * @return obejct Response.
+	 */
+	@ApiOperation(value = ApiConstants.OPERATION_API, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(value = { @ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK),
+			@ApiResponse(code = ApiConstants.CODE_BAD_REQUEST, message = ApiConstants.BAD_REQUEST),
+			@ApiResponse(code = ApiConstants.CODE_INTERNAL_ERROR, message = ApiConstants.INTERNAL_ERROR) })
+	@ApiImplicitParams({
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
+	@ValidateHeaders
+	@PostMapping(value = ApiConstants.API_ENDPOINT_CONSULTA_STATUS)
+	public ResponseEntity<AntadResponse> confirmationStatus(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+			@RequestBody @Valid ConsultaEstatusRequest request) {
 
+		return paymentValidateFeign.consultaEstatusRequest(
+				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), 
+				httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+				httpHeaders.getFirst(ApiConstants.CHANNEL_ID), request);
+	}
+	
+	/**
+	 * Endpoint utilizado para la funcionalidad de realizar una transferencia SPEI.
+	 * 
+	 * @param speiTransferRequest request para realizar transferencia.
+	 * @return obejct Response.
+	 */
+	@ApiOperation(value = ApiConstants.OPERATION_API, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(value = { @ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK),
+			@ApiResponse(code = ApiConstants.CODE_BAD_REQUEST, message = ApiConstants.BAD_REQUEST),
+			@ApiResponse(code = ApiConstants.CODE_INTERNAL_ERROR, message = ApiConstants.INTERNAL_ERROR) })
+	@ApiImplicitParams({
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
+	@ValidateHeaders
+	@PostMapping(value = ApiConstants.API_ENDPOINT_NOTIFICACION_POSITIVA)
+	public ResponseEntity<AntadResponse> notificacionPositiva(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+			@RequestBody @Valid NotificacionPositivaRequest request) {
 
+		return paymentValidateFeign.notificacionPositivaRequest(
+				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), 
+				httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+				httpHeaders.getFirst(ApiConstants.CHANNEL_ID), request);
+	}
+	
+	/**
+	 * Endpoint utilizado para la funcionalidad de realizar una transferencia SPEI.
+	 * 
+	 * @param speiTransferRequest request para realizar transferencia.
+	 * @return obejct Response.
+	 */
+	@ApiOperation(value = ApiConstants.OPERATION_API, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(value = { @ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK),
+			@ApiResponse(code = ApiConstants.CODE_BAD_REQUEST, message = ApiConstants.BAD_REQUEST),
+			@ApiResponse(code = ApiConstants.CODE_INTERNAL_ERROR, message = ApiConstants.INTERNAL_ERROR) })
+	@ApiImplicitParams({
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
+	@ValidateHeaders
+	@PostMapping(value = ApiConstants.API_ENDPOINT_NOTIFICACION_NEGATIVA)
+	public ResponseEntity<AntadResponse> notificacionNegativa(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+			@RequestBody @Valid NotificacionNegativaRequest request) {
+
+		return paymentValidateFeign.notificacionNegativaRequest(
+				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), 
+				httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+				httpHeaders.getFirst(ApiConstants.CHANNEL_ID), request);
+	}
 }

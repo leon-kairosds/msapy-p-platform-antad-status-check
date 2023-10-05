@@ -178,6 +178,28 @@ public class ApiConstants {
 	 * Constante utilizada para representar el nombre del header ChannelId.
 	 */
 	public static final String REFRESH_TOKEN = "refresh_token";
+	
+	/**
+	 * Endpoint del Controlador para restaurar sesion.
+	 */
+//	public static final String API_ENDPOINT_SERVICE_PAYMENT = "${constants.api.uri.specificPaths.services}";
+	
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_MESSAGING_NOTIFICATION = "${api.messaging.notification.send}";
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_CONSULTA_STATUS = "${api.consulta.status}";
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_NOTIFICACION_POSITIVA = "${api.notification.positiva}";
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_NOTIFICACION_NEGATIVA = "${api.notification.negativa}";
 	/**
 	 * Constante que contiene el mensaje a logear de msw Request.
 	 */
@@ -186,7 +208,14 @@ public class ApiConstants {
 	 * Constante que contiene el mensaje a logear de msw Request.
 	 */
 	public static final String LOG_CONFIRMATION_PAYMENT = "SERVICE CALL - [Envio de peticion a confirmation payment]";
-
+	/**
+	 * Constante que contiene el mensaje a logear de msw Request.
+	 */
+	public static final String LOG_PAYMENT_VALIDATE = "SERVICE CALL - [Envio de peticion a payment validate]";
+	/**
+	 * Constante que contiene el mensaje a logear de sendMessagingNotification.
+	 */
+	public static final String LOG_SEND_MESSAGING_NOTIFICATION = "SERVICE CALL - [Envio de mensaje de notifiación]";
 	/**
 	 * Swagger configuration Starts here. Application base package.
 	 */

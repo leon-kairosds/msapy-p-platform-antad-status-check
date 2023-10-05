@@ -180,6 +180,37 @@ public class Constants {
 	 * Constante para la palabra header.
 	 */
 	public static final String HEADER_WORD_CONSTANT = "header";
+	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_MACADDRESS = "minimo 12 maximo 16";
+	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_NUMERIC = "requiere valor númerico";
+	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_10DIG = "maximo 10 digitos";
+	/**
+	 * parametro de validacion del request..
+	 */
+	public static final String LOG_BADREQUEST_SUCURSAL = "maximo 4 digitos";
+	/**
+	 * parametro de validacion del request..
+	 */
+	public static final String LOG_BADREQUEST_CAJERO = "maximo 12 digitos";
+	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_TIKET = "maximo 9 digitos";
+	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_HORARIO = "maximo 2 digitos";	/**
+	 * parametro de validacion del request.
+	 */
+	public static final String LOG_BADREQUEST_FC = "maximo 12 digitos";
 
 	/**
 	 * parametro de validacion del request.
