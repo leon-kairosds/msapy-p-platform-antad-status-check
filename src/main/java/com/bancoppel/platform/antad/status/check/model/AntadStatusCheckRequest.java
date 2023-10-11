@@ -14,7 +14,15 @@
 
 package com.bancoppel.platform.antad.status.check.model;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import com.bancoppel.platform.antad.status.check.constant.Constants;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,5 +39,60 @@ import lombok.Data;
 @ApiModel
 @Data
 public class AntadStatusCheckRequest {
+	
+	private String userName;
 
+	private String password;
+
+	private String token;
+
+	private String macAddress;
+
+	private String comercio;
+
+	private String sucursal;
+
+	private String caja;
+
+	private String cajero;
+
+	private String ticket;
+
+	private String folioComercio;
+
+	private String operacion;
+
+	private String referencia;
+
+	private String monto;
+
+	private String emisor;
+
+	private String modoIngreso;
+
+	private String comision;
+
+	private String sku;
+
+	private String referencia2;
+
+	private String referencia3;
+
+	private String reintento;
+
+	private String fac;
+	
+	private String invoiceBranch;
+	
+	private String numAuth;
+	
+	private String mensajeTicket;
+	
+	private String folioTransaccion;
+	
+	private String amount;
+	
+	private String originAccountNumber;
+	
+	private String virtualUser;
 }

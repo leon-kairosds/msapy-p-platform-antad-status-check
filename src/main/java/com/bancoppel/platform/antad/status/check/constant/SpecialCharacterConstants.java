@@ -138,6 +138,14 @@ public class SpecialCharacterConstants {
 	 * Constante para representar un numero entero 29.
 	 */
 	public static final int INT_VALUE_29 = 29;
+	/**
+	 * Constante para representar string con valor "\0".
+	 */
+	public static final String SLASH_ZERO = "\0";
+	/**
+	 * Constant used to represent a mask character.
+	 */
+	public static final String MASKED_ACCOUNT_NUMBER_CHARACTER = "X";
 
 	/**
 	 * Constructor privado para evitar la instancia de la clase.

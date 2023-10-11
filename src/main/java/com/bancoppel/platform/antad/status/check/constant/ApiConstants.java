@@ -26,16 +26,6 @@ import org.springframework.stereotype.Component;
 public class ApiConstants {
 
 	/**
-	 * Constant path pattern for interceptor.
-	 */
-	@Value("${constants.api.uri.basePath}")
-	private String basePath;
-	/**
-	 * Constant path pattern for interceptor logout.
-	 */
-	@Value("${constants.api.uri.interceptorPath}")
-	private String interceptorPath;
-	/**
 	 * Constante usada para representar el nombre de la operacion para obtener todos
 	 * los convenios con ANTAD
 	 */
@@ -216,6 +206,24 @@ public class ApiConstants {
 	 * Constante que contiene el mensaje a logear de sendMessagingNotification.
 	 */
 	public static final String LOG_SEND_MESSAGING_NOTIFICATION = "SERVICE CALL - [Envio de mensaje de notifiación]";
+	/**
+	 * Constante que contiene el mensaje a logear de getPaymentAgreement.
+	 */
+	public static final String LOG_PAYMENT_AGREEMENT = "SERVICE CALL - [Obtiene contrato de pago]";
+	/**
+	 * Descripcion.
+	 */
+	public static final String LOG_CHECK_CHECKING_ACCOUNT = "SERVICE CALL - [Account Details]";
+	/**
+	 * Constant path pattern for interceptor.
+	 */
+	@Value("${constants.api.uri.basePath}")
+	private String basePath;
+	/**
+	 * Constant path pattern for interceptor logout.
+	 */
+	@Value("${constants.api.uri.interceptorPath}")
+	private String interceptorPath;
 	/**
 	 * Swagger configuration Starts here. Application base package.
 	 */

@@ -93,8 +93,34 @@ public class FeignConstants {
 	 */
 	public static final String SEND_MESSAGING_NOTIFICATION_ENDPOINT = "${constants.feign.path.sendMessagingNotification}";
 	/**
-   * Constructor privado para evitar la instancia de esta clase.
-   */
+	 * Constante que representa el nombre del feign get payment agreement.
+	 */
+	public static final String CATALOG_AGREEMENT_NAME = "${constants.feign.name.getCatalogAgreement}";
+
+	/**
+	 * Constante que representa la URL del feign get payment agreement.
+	 */
+	public static final String CATALOG_AGREEMENT_URL = "${constants.feign.url.getCatalogAgreement}";
+
+	/**
+	 * Constante que representa el endpoint del feign get payment agreement.
+	 */
+	public static final String CATALOG_AGREEMENT_ENDPOINT = "${constants.feign.path.getCatalogAgreement}";
+	/**
+     * Constructor privado para evitar la instancia de esta clase.
+     */
+	/**
+	 * Constante que representa la URL del feign send messaging notification.
+	 */
+	public static final String ACCOUNT_DETAIL_URL = "${constants.feign.url.accountDetail}";
+	/**
+	 * Constante que representa el nombre del feign send messaging notification.
+	 */
+	public static final String ACCOUNT_DETAIL_NAME = "${constants.feign.name.accountDetail}";
+	/**
+	 * Constante que representa el endpoint del feign send messaging notification.
+	 */
+	public static final String ACCOUNT_DETAIL_ENDPOINT = "${constants.feign.path.accountDetail}";
   private FeignConstants() {}
 
 }

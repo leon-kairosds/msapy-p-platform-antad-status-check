@@ -16,10 +16,9 @@ package com.bancoppel.platform.antad.status.check.service;
 
 import org.springframework.http.HttpHeaders;
 
+import com.bancoppel.platform.antad.status.check.model.AntadResponse;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
+import com.bancoppel.platform.antad.status.check.model.ConsultaEstatusRequest;
 
 /**
  * 
@@ -28,7 +27,7 @@ import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
  * @Fecha: May 4, 2023
  * @Empresa: Kairos DS
  */
-public interface IAntadStatusCheckService {
+public interface IConsultaEstatusService {
 	
-	AntadStatusCheckResponse getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers);
+	AntadResponse getConsultaEstatus(AntadStatusCheckRequest request, HttpHeaders headers);
 }

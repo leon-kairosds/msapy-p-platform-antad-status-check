@@ -28,6 +28,10 @@ public class Constants {
 	 */
 	public static final String DATE_TIME_FORMAT_Z = "yyyy-MM-dd'T'HH:mm:ssZ";
 	/**
+	 * Constant that defines the sendNotification date format pattern.
+	 */
+	public static final String SEND_NOTIFICATION_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
+	/**
 	 * Constante para identificar un password enmascarado.
 	 */
 	public static final String REGEX_MASK = "\\b[0-9][0-9][a-zA-Z0-9]{6}\\b";
@@ -181,6 +185,16 @@ public class Constants {
 	 */
 	public static final String HEADER_WORD_CONSTANT = "header";
 	/**
+	 * Constante con la cadena que contiene el mensaje a mandar a Send Notification
+	 * Messaging.
+	 */
+	public static final String ID_MESSAGE_PORTAL_BPI = "PORTAL_BPI";
+	/**
+	 * Constante con la cadena que contiene el mensaje a mandar a Send Notification
+	 * Messaging.
+	 */
+	public static final String ID_MESSAGE_BPI_PGOTCO = "BPI_PGOTCO";
+	/**
 	 * parametro de validacion del request.
 	 */
 	public static final String LOG_BADREQUEST_MACADDRESS = "minimo 12 maximo 16";
@@ -216,6 +230,15 @@ public class Constants {
 	 * parametro de validacion del request.
 	 */
 	public static final String LOG_BADREQUEST_DECIMAL = "Tiene que ser decimal 0 o mayor";
+	/**
+	 * Constant that is used to show a message about the begin of the request.
+	 */
+	public static final String LOG_BADREQUEST_STATUS = "estatus invalido";
+
+	/**
+	 * Constant that is used to show a message about the begin of the request.
+	 */
+	public static final String LOG_BADREQUEST_CATEGORYNUMBER = "categoria invalida";
 
 	/**
 	 * Private constructor will prevent the instantiation of this class.

@@ -12,23 +12,31 @@
  * the License.
  */
 
-package com.bancoppel.platform.antad.status.check.service;
+package com.bancoppel.platform.antad.status.check.model;
 
-import org.springframework.http.HttpHeaders;
+import javax.validation.constraints.NotEmpty;
 
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 /**
  * 
- * @Descripción: Define metodo para obtener la cuenta del cliente.
+ * @Descripción: POJO que define la petición al servicio.
  * @Autor: Kairos DS - Leon Fernando.
- * @Fecha: May 4, 2023
+ * @Fecha: Abr 4, 2023
  * @Empresa: Kairos DS
  */
-public interface IAntadStatusCheckService {
-	
-	AntadStatusCheckResponse getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers);
+
+@ApiModel
+@Data
+public class CheckCheckingAccountRequest {
+
+	/**
+	 * Propiedad para el numero de cuenta de la cuenta.
+	 */
+	@NotEmpty
+	@ApiModelProperty(notes = "Numero de cuenta", example = "13000000056")
+	private String cuenta;
+
 }
