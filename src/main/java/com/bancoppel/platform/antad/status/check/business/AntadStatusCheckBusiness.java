@@ -24,8 +24,6 @@ import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
 import com.bancoppel.platform.antad.status.check.model.CatalogAgreementResponse;
 import com.bancoppel.platform.antad.status.check.model.CheckCheckingAccountResponse;
-import com.bancoppel.platform.antad.status.check.model.MessagingNotificationsResponse;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
 import com.bancoppel.platform.antad.status.check.service.IAntadStatusCheckService;
 import com.bancoppel.platform.antad.status.check.service.feign.ICatalogAgreementFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IDepositAccountDetailFeign;
@@ -40,7 +38,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,6 +64,9 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 	
 	@Autowired
 	ApiValues apiValues;
+	
+	AntadResponse consultaEstatus = null;
+	
 
 	int count = 0;
 
@@ -104,75 +104,68 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 			@Override
 			public void run() {
 
-				if (count <= 60) {
-					System.out.println("Han transcurrido " + count + " segundos.");
-					log.info("Entra a if del maxCount");
+				log.info("Inicia proceso consulta estatus");
+				if (count <= 50) {
+					log.info("Han transcurrido " + count + " segundos.");
 
 					if (count % 5 == 0) { // Validar esl estatus diferente de OK de validate consulta eststus
+						
+						log.info("inicia peticion hacia Antad segundo: " + count);
 
-						AntadResponse consultaEstatus = feign.getConsultaEstatus(request, headers);
+						consultaEstatus = feign.getConsultaEstatus(request, headers);
 						if (consultaEstatus != null) {
 							switch (consultaEstatus.getRespCode()) {
 							
 							case ApiValues.SUCESS:{
 								
-								//confirmacion?
-								ServicesPaymentResponse getConfirmation = 
-										feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getConfirmationBus());
-								
-								//push 
-								MessagingNotificationsResponse sendPushNotification = 
-										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, "Pendiente por crear", Constants.ID_MESSAGE_BPI_PGOTCO);
+								log.info("Antad respondio con sucess");
+								//push positiva
+										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, Constants.ID_PLANTILLA_PUSH, Constants.ID_MESSAGE_BPI_PGOTCO);
 								
 								//correo
-								MessagingNotificationsResponse getMessagingNotification = 
 										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, apiValues.getEmailTemplateAntad(), Constants.ID_MESSAGE_PORTAL_BPI);
+								resetParametros();
+								stopProceso();
 								
-								break;
-							}
-							
-							case ApiValues.AUTORIZATED_WITH_NEGATIVE:
-							case ApiValues.NOT_FOUND:{
 								
-								//reverso
-								ServicesPaymentResponse getConfirmation = 
-										feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getReverseBus());
-								//Push negativo
-								MessagingNotificationsResponse sendPushNotification = 
-										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, "Pendiente por crear", Constants.ID_MESSAGE_BPI_PGOTCO);
 								break;
 							}
 							
 							case ApiValues.AUTORIZATED_WITHOUT_NOTIFICATION:{
 
+								log.info("Antad respondio con NP");
 								//Notificacion Positiva
-								AntadResponse getNotificacionPositiva =
 										feign.getNotificacionPositiva(request, headers);
 								
 								//confirmacion
-								ServicesPaymentResponse getConfirmation = 
 										feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getConfirmationBus());
 								//correo
-								MessagingNotificationsResponse getMessagingNotification = 
 										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, apiValues.getEmailTemplateAntad(), Constants.ID_MESSAGE_PORTAL_BPI);
-								//push
-								MessagingNotificationsResponse sendPushNotification = 
-										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination,"Pendiente por crear", Constants.ID_MESSAGE_BPI_PGOTCO);
+								//push positva
+										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, Constants.ID_PLANTILLA_PUSH, Constants.ID_MESSAGE_BPI_PGOTCO);
+								resetParametros();
+								stopProceso();
 								break;
+								
 							}
 								
 							}
 						}
-						System.out.println(
-								"Ejecutando consulta estatus con validacion de aux en " + count + " segundos.");
 					}
 
 				} else {
+					
+					log.info("Termina proceso de consulta estatus");
+					
+					if (consultaEstatus.getRespCode() != ApiValues.SUCESS && consultaEstatus.getRespCode() != ApiValues.AUTORIZATED_WITHOUT_NOTIFICATION) {
+						
+						log.info("Se aplica reverso y notificacion push negativa, antad no respondio satisfactoriamente");
+						//reverso
+								feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getReverseBus());
+						//Push negativo
+								feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, Constants.ID_PLANTILLA_PUSH_NEGATIVA, Constants.ID_MESSAGE_BPI_PGOTCO);
+					}
 
-					System.out.println("Matar proceso en " + count + " segundos.");
-
-					// if() si el objeto es diferente de nulo en la consulta status del validate o
-					// saber si ya regreso la peticion
 					resetParametros();
 					stopProceso();
 				}
@@ -187,8 +180,10 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 
 	private void resetParametros() {
 		count = 0;
+		consultaEstatus = null;
 		executor = null;
 		this.aux = 0;
+		
 	}
 
 	private void stopProceso() {

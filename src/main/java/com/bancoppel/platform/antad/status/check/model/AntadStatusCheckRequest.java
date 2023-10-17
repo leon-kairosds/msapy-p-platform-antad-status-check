@@ -41,58 +41,32 @@ import lombok.Data;
 public class AntadStatusCheckRequest {
 	
 	private String userName;
-
 	private String password;
-
 	private String token;
-
 	private String macAddress;
-
 	private String comercio;
-
 	private String sucursal;
-
 	private String caja;
-
 	private String cajero;
-
 	private String ticket;
-
 	private String folioComercio;
-
 	private String operacion;
-
 	private String referencia;
-
 	private String monto;
-
 	private String emisor;
-
 	private String modoIngreso;
-
 	private String comision;
-
 	private String sku;
-
 	private String referencia2;
-
 	private String referencia3;
-
-	private String reintento;
-
-	private String fac;
-	
-	private String invoiceBranch;
 	
 	private String numAuth;
-	
 	private String mensajeTicket;
-	
 	private String folioTransaccion;
 	
 	private String amount;
-	
+	private String reintento;
+	private String invoiceBranch;
 	private String originAccountNumber;
-	
 	private String virtualUser;
 }

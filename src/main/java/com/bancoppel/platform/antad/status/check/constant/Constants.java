@@ -195,6 +195,16 @@ public class Constants {
 	 */
 	public static final String ID_MESSAGE_BPI_PGOTCO = "BPI_PGOTCO";
 	/**
+	 * Constante con la cadena que contiene el mensaje a mandar a Send Notification
+	 * Messaging.
+	 */
+	public static final String ID_PLANTILLA_PUSH = "BEX_ANTAD";
+	/**
+	 * Constante con la cadena que contiene el mensaje a mandar a Send Notification
+	 * Messaging.
+	 */
+	public static final String ID_PLANTILLA_PUSH_NEGATIVA = "BEX_ANTAD";
+	/**
 	 * parametro de validacion del request.
 	 */
 	public static final String LOG_BADREQUEST_MACADDRESS = "minimo 12 maximo 16";

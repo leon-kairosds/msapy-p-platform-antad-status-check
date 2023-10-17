@@ -53,6 +53,8 @@ public class TransformFeigns {
 	@Autowired
 	public ApiValues apiValues;
 	
+	private String localDat = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.FORMATTER_FINISH));
+	
 	private String localDate = LocalDateTime.now()
 			.format(DateTimeFormatter.ofPattern(Constants.SEND_NOTIFICATION_DATE_PATTERN));
 	
@@ -117,7 +119,7 @@ public class TransformFeigns {
 		notificacion.setReferencia2(antadStatusCheckRequest.getReferencia2());
 		notificacion.setReferencia3(antadStatusCheckRequest.getReferencia3());
 		notificacion.setReintento(antadStatusCheckRequest.getReintento());
-		notificacion.setFac(antadStatusCheckRequest.getFac());
+		notificacion.setFac(localDat);
 				
 		return notificacion;
 	}
@@ -156,7 +158,7 @@ public class TransformFeigns {
 		notificacion.setReferencia2(antadStatusCheckRequest.getReferencia2());
 		notificacion.setReferencia3(antadStatusCheckRequest.getReferencia3());
 		notificacion.setReintento(antadStatusCheckRequest.getReintento());
-		notificacion.setFac(antadStatusCheckRequest.getFac());
+		notificacion.setFac(localDat);
 				
 		return notificacion;
 	}
