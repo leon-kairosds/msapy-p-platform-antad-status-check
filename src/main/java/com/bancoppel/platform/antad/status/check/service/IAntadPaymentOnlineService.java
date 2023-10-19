@@ -17,7 +17,6 @@ package com.bancoppel.platform.antad.status.check.service;
 import org.springframework.http.HttpHeaders;
 
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
 

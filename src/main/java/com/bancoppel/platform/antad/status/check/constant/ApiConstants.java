@@ -163,7 +163,7 @@ public class ApiConstants {
 	/**
 	 * Constante utilizada para representar el nombre del header ChannelId.
 	 */
-	public static final String CHANNEL_ID = "ChannelId";
+	public static final String CHANNEL_ID = "Channel_Id";
 	/**
 	 * Constante utilizada para representar el nombre del header ChannelId.
 	 */
@@ -190,6 +190,14 @@ public class ApiConstants {
 	 * Constante path base de messaging notifications.
 	 */
 	public static final String  API_ENDPOINT_NOTIFICACION_NEGATIVA = "${api.notification.negativa}";
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_CATALOG_AGREEMENT = "${api.catalogo.agreement}";
+	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_ACCOUNT_DETAIL = "${api.account.detail}";
 	/**
 	 * Constante que contiene el mensaje a logear de msw Request.
 	 */

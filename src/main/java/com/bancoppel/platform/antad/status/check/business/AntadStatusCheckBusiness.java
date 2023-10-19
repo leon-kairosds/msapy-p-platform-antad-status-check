@@ -21,7 +21,6 @@ import com.bancoppel.platform.antad.status.check.constant.AntadStatusCheckConsta
 import com.bancoppel.platform.antad.status.check.exceptions.custom.DatabaseTimeoutException;
 import com.bancoppel.platform.antad.status.check.model.AntadResponse;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
 import com.bancoppel.platform.antad.status.check.model.CatalogAgreementResponse;
 import com.bancoppel.platform.antad.status.check.model.CheckCheckingAccountResponse;
 import com.bancoppel.platform.antad.status.check.service.IAntadStatusCheckService;
@@ -38,6 +37,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -80,13 +81,13 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 	@Override
 	@HandledProcedure(name = AntadStatusCheckConstants.ACCOUNT_BUSINESS_TIME, value = AntadStatusCheckConstants.ACCOUNT_BUSINESS_TIME, ignoreExceptions = {
 			DatabaseTimeoutException.class })
-	public AntadStatusCheckResponse getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers) {
+	public ResponseEntity<HttpStatus> getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers) {
 		log.debug(" ** Request: {}", request);
 
 		executor = Executors.newScheduledThreadPool(1);
 		executor.scheduleAtFixedRate(tiempoEjecucion(request, headers), 1 /* Retardo inicial */, 1, TimeUnit.SECONDS);
 
-		AntadStatusCheckResponse statusResponse = new AntadStatusCheckResponse();
+		ResponseEntity<HttpStatus> statusResponse = new ResponseEntity<>(HttpStatus.OK);
 
 		log.debug(" ** Response: {}", statusResponse.toString());
 

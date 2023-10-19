@@ -35,10 +35,8 @@ import com.bancoppel.platform.antad.status.check.constant.AntadStatusCheckConsta
 import com.bancoppel.platform.antad.status.check.constant.Constants;
 import com.bancoppel.platform.antad.status.check.constant.RoutesConstants;
 import com.bancoppel.platform.antad.status.check.exceptions.ErrorResponse;
-import com.bancoppel.platform.antad.status.check.model.AntadResponse;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
-import com.bancoppel.platform.antad.status.check.service.IAntadStatusCheckService;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -76,6 +74,8 @@ public class AntadStatusCheckController {
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID),
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID) })
 	@ApiResponses(value = {
 			@ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK, response = AntadStatusCheckResponse.class),
@@ -86,12 +86,11 @@ public class AntadStatusCheckController {
 
 	@PostMapping(value = RoutesConstants.RETRIEVE_CATALOG_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ValidateHeaders
-	public ResponseEntity<AntadStatusCheckResponse> getAntadStatusCheck(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+	public ResponseEntity<HttpStatus> getAntadStatusCheck(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
 			@Valid @RequestBody AntadStatusCheckRequest request) {
 		log.debug(AntadStatusCheckConstants.LOG_CHECK_STATUS_ANTAD_CONTROLLER);
 
-		AntadStatusCheckResponse response = antadStatusCheckBusiness.getAntadStatusCheckService(request, httpHeaders);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return antadStatusCheckBusiness.getAntadStatusCheckService(request, httpHeaders);
 	}
 
 }

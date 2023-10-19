@@ -15,7 +15,6 @@
 package com.bancoppel.platform.antad.status.check.util;
 
 import com.bancoppel.platform.antad.status.check.constant.Constants;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

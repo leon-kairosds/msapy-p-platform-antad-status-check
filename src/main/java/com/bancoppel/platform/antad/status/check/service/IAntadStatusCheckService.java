@@ -15,11 +15,13 @@
 package com.bancoppel.platform.antad.status.check.service;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckRequest;
-import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
-import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
+//import com.bancoppel.platform.antad.status.check.model.AntadStatusCheckResponse;
+//import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
+//import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
 
 /**
  * 
@@ -30,5 +32,5 @@ import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
  */
 public interface IAntadStatusCheckService {
 	
-	AntadStatusCheckResponse getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers);
+	ResponseEntity<HttpStatus> getAntadStatusCheckService(AntadStatusCheckRequest request, HttpHeaders headers);
 }

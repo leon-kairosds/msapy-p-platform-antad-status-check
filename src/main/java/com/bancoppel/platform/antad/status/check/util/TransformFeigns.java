@@ -60,6 +60,8 @@ public class TransformFeigns {
 	
 	ConsultaEstatusRequest transformConsultaEstatus(AntadStatusCheckRequest antadStatusCheckRequest) {
 		
+		
+		
 		ConsultaEstatusRequest consultaEstatusRequest = new ConsultaEstatusRequest();
 		
 		consultaEstatusRequest.setUserName(antadStatusCheckRequest.getUserName());
