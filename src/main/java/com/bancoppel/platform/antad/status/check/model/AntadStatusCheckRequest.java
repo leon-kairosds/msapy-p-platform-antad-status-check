@@ -64,7 +64,6 @@ public class AntadStatusCheckRequest {
 	private String mensajeTicket;
 	private String folioTransaccion;
 	
-	private String amount;
 	private String reintento;
 	private String invoiceBranch;
 	private String originAccountNumber;

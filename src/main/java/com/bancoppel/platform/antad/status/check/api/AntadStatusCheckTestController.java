@@ -200,7 +200,7 @@ public class AntadStatusCheckTestController {
 			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
 	@ValidateHeaders
 	@PostMapping(value = ApiConstants.API_ENDPOINT_CONSULTA_STATUS)
-	public ResponseEntity<AntadResponse> confirmationStatus(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+	public ResponseEntity<AntadResponse> consultaStatus(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
 			@RequestBody @Valid ConsultaEstatusRequest request) {
 
 		return paymentValidateFeign.consultaEstatusRequest(

@@ -188,7 +188,7 @@ public class TransformFeigns {
 		servicesPaymentRequest.setOriginAccountNumber(request.getOriginAccountNumber());
 		servicesPaymentRequest.setDestinationAccountNumber(apiValues.getDestinationAccountNumber());
 		servicesPaymentRequest.setCheck("0");
-		servicesPaymentRequest.setAmount(request.getAmount());
+		servicesPaymentRequest.setAmount(request.getMonto());
 		servicesPaymentRequest.setCurrency(apiValues.getCurrency()); // Pendientes
 		servicesPaymentRequest.setReference(request.getReferencia());
 		servicesPaymentRequest.setNumCardOrigin(numberCardOrigin.getNum_tarjeta());
@@ -312,7 +312,7 @@ public class TransformFeigns {
 		notification.setImporte5(null);
 		notification.setFecha1(localDate);
 		notification.setFecha2(localDate);
-		notification.setImporte3(new BigDecimal(request.getAmount())); // importe 3
+		notification.setImporte3(new BigDecimal(request.getMonto())); // importe 3
 		notification.setCuenta(maskAccount(request.getOriginAccountNumber()));
 		notification.setTarjeta(maskAccount(numberCardResponse.getNum_tarjeta()));
 		notification.setMessage1(maskAccount(request.getOriginAccountNumber())); // mensaje 1
