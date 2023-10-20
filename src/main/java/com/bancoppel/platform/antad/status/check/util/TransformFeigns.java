@@ -1,6 +1,7 @@
 package com.bancoppel.platform.antad.status.check.util;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -24,8 +25,11 @@ import com.bancoppel.platform.antad.status.check.model.ConsultaEstatusRequest;
 import com.bancoppel.platform.antad.status.check.model.IdAgreementRequest;
 import com.bancoppel.platform.antad.status.check.model.MessagingNotificationsRequest;
 import com.bancoppel.platform.antad.status.check.model.MessagingNotificationsResponse;
+import com.bancoppel.platform.antad.status.check.model.MswResponseRequest;
+import com.bancoppel.platform.antad.status.check.model.MswResponseResponse;
 import com.bancoppel.platform.antad.status.check.model.NotificacionNegativaRequest;
 import com.bancoppel.platform.antad.status.check.model.NotificacionPositivaRequest;
+import com.bancoppel.platform.antad.status.check.service.feign.IAntadOperationFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.ICatalogAgreementFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IConfirmationPaymentFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IDepositAccountDetailFeign;
@@ -51,12 +55,17 @@ public class TransformFeigns {
 	ICatalogAgreementFeign catalogAgreementFeign;
 	
 	@Autowired
+	IAntadOperationFeign antadOperationFeign;
+	
+	@Autowired
 	public ApiValues apiValues;
 	
 	private String localDat = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.FORMATTER_FINISH));
 	
 	private String localDate = LocalDateTime.now()
 			.format(DateTimeFormatter.ofPattern(Constants.SEND_NOTIFICATION_DATE_PATTERN));
+	
+	private LocalDate date = LocalDate.now();
 	
 	ConsultaEstatusRequest transformConsultaEstatus(AntadStatusCheckRequest antadStatusCheckRequest) {
 		
@@ -322,6 +331,53 @@ public class TransformFeigns {
 		return notification;
 		
 	} 
+	
+	private MswResponseRequest tranformMswResponse(AntadStatusCheckRequest request, CatalogAgreementResponse car, AntadResponse response, String invoiceBranch) {
+		
+		MswResponseRequest respuesta = new MswResponseRequest();
+		
+		respuesta.setNumCategoria(apiValues.getCategoria());
+		respuesta.setNumConvenio(car.getAgreementNumber());
+		respuesta.setIdSucursal(apiValues.getSucursal());
+		respuesta.setFolioSuc(invoiceBranch);
+		respuesta.setTransSuc(car.getTransactionBranchCharge());
+		respuesta.setFechaPago(date);
+		respuesta.setNumTrama(apiValues.getNumTrama());
+		respuesta.setCampo1(response.getUserName());
+		respuesta.setCampo2(response.getPassword());
+		respuesta.setCampo3(response.getToken());
+		respuesta.setCampo4(response.getMacAddress());
+		respuesta.setCampo5(response.getComercio());
+		respuesta.setCampo6(response.getRespCode());
+		respuesta.setCampo7(response.getNumAuth());
+		respuesta.setCampo8(response.getMensajeTicket());
+		respuesta.setCampo9(response.getMensajeCajero());
+		respuesta.setCampo10(response.getFolioTransaccion());
+		respuesta.setCampo11(response.getFolioComercio());
+		respuesta.setCampo12(response.getComision());
+		respuesta.setCampo13(response.getDatosAdicionales());
+		respuesta.setCampo14(response.getClaveAcceso());
+		respuesta.setCampo15(apiValues.getComercio());
+		respuesta.setCampo16(apiValues.getCaja());
+		respuesta.setCampo17(apiValues.getCajero());
+		respuesta.setCampo18(apiValues.getOperacionConsul());
+		respuesta.setCadenaReq(request.toString());
+		respuesta.setCadenaRply(response.toString());
+		respuesta.setUserInsert(apiValues.getUsuario());
+		respuesta.setFechaInsert(localDate);
+		
+		return respuesta;
+	}
+	
+	public MswResponseResponse sendMswResponse(HttpHeaders httpHeaders, AntadStatusCheckRequest request, CatalogAgreementResponse car, AntadResponse response, String invoiceBranch) {
+		
+		return antadOperationFeign.sendMswResponse(
+				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), 
+				httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+				httpHeaders.getFirst(ApiConstants.CHANNEL_ID), tranformMswResponse(request, car, response,invoiceBranch)).getBody();
+	}
 	
 	public MessagingNotificationsResponse sendMessagingNotification (HttpHeaders httpHeaders, AntadStatusCheckRequest request, CatalogAgreementResponse car, CheckCheckingAccountResponse numberCardResponse, String idPlantilla, String idMensaje) {
 		

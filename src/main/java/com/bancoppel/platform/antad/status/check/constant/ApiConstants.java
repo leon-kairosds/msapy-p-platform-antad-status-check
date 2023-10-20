@@ -30,6 +30,12 @@ public class ApiConstants {
 	 * los convenios con ANTAD
 	 */
 	public static final String OPERATION_API = "retrieve-check-status-antad";
+	
+	/**
+	 * Constante usada para representar el nombre de la operacion para obtener todos
+	 * los convenios con ANTAD
+	 */
+	public static final String MSW_RESPONSE_API = "retrieve-msw-response";
 	/**
 	 * Constante usada para representar el nombre de la operacion para obtener todos
 	 * los convenios con ANTAD
@@ -199,6 +205,10 @@ public class ApiConstants {
 	 */
 	public static final String  API_ENDPOINT_ACCOUNT_DETAIL = "${api.account.detail}";
 	/**
+	 * Constante path base de messaging notifications.
+	 */
+	public static final String  API_ENDPOINT_MSW_RESPONSE = "${api.mswResponse.path}";
+	/**
 	 * Constante que contiene el mensaje a logear de msw Request.
 	 */
 	public static final String LOG_PAYMENT_ONLINE = "SERVICE CALL - [Envio de peticion a payment online]";
@@ -222,6 +232,10 @@ public class ApiConstants {
 	 * Descripcion.
 	 */
 	public static final String LOG_CHECK_CHECKING_ACCOUNT = "SERVICE CALL - [Account Details]";
+	/**
+	 * Constante que contiene el mensaje a logear de msw Request.
+	 */
+	public static final String LOG_ANTAD_OPERATION = "SERVICE CALL - [Envio de peticion a ANTAD aperation]";
 	/**
 	 * Constant path pattern for interceptor.
 	 */

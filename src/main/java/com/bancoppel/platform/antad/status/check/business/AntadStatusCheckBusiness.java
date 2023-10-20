@@ -120,6 +120,13 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 							case ApiValues.SUCESS:{
 								
 								log.info("Antad respondio con sucess");
+								
+								//msw respuesta
+								feign.sendMswResponse(headers, request, getAgreementId, consultaEstatus, request.getInvoiceBranch());
+								
+								//confirmacion
+								feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getConfirmationBus());
+
 								//push positiva
 										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, Constants.ID_PLANTILLA_PUSH, Constants.ID_MESSAGE_BPI_PGOTCO);
 								
@@ -140,6 +147,10 @@ public class AntadStatusCheckBusiness implements IAntadStatusCheckService {
 								
 								//confirmacion
 										feign.getConfirmation(headers, request, getAgreementId, getAccountDetailDestination, getAccountDetailOrigin, apiValues.getConfirmationBus());
+								
+								//msw respuesta
+										feign.sendMswResponse(headers, request, getAgreementId, consultaEstatus, request.getInvoiceBranch());
+										
 								//correo
 										feign.sendMessagingNotification(headers, request, getAgreementId, getAccountDetailDestination, apiValues.getEmailTemplateAntad(), Constants.ID_MESSAGE_PORTAL_BPI);
 								//push positva

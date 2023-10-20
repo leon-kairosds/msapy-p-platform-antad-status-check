@@ -121,6 +121,27 @@ public class FeignConstants {
 	 * Constante que representa el endpoint del feign send messaging notification.
 	 */
 	public static final String ACCOUNT_DETAIL_ENDPOINT = "${constants.feign.path.accountDetail}";
+	/**
+	 * Constante que representa la URL del feign send messaging notification.
+	 */
+	public static final String ANTAD_OPERATION_URL = "${constants.feign.url.antadOperationInsert}";
+	/**
+	 * Constante que representa el nombre del feign send messaging notification.
+	 */
+	public static final String ANTAD_OPERATION_NAME = "${constants.feign.name.antadOperation}";
+	/**
+	 * Constante que representa el endpoint del feign send messaging notification.
+	 */
+	public static final String ANTAD_OPERATION_INSERT_ENDPOINT = "${constants.feign.path.antadOperationInsert}";
+	/**
+	 * Constante que representa el nombre del feign send messaging notification.
+	 */
+	public static final String MSW_REQUEST_NAME = "${constants.feign.name.mswrequest}";
+	/**
+	 * Constante que representa el endpoint del feign send messaging notification.
+	 */
+	public static final String MSW_RESPONSE_ENDPOINT = "${constants.feign.path.mswresponse}";
+	
   private FeignConstants() {}
 
 }

@@ -42,10 +42,13 @@ import com.bancoppel.platform.antad.status.check.model.CheckCheckingAccountRespo
 import com.bancoppel.platform.antad.status.check.model.ConsultaEstatusRequest;
 import com.bancoppel.platform.antad.status.check.model.IdAgreementRequest;
 import com.bancoppel.platform.antad.status.check.model.MessagingNotificationsRequest;
+import com.bancoppel.platform.antad.status.check.model.MswResponseRequest;
+import com.bancoppel.platform.antad.status.check.model.MswResponseResponse;
 import com.bancoppel.platform.antad.status.check.model.NotificacionNegativaRequest;
 import com.bancoppel.platform.antad.status.check.model.NotificacionPositivaRequest;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentRequest;
 import com.bancoppel.platform.antad.status.check.model.ServicesPaymentResponse;
+import com.bancoppel.platform.antad.status.check.service.feign.IAntadOperationFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.ICatalogAgreementFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IConfirmationPaymentFeign;
 import com.bancoppel.platform.antad.status.check.service.feign.IDepositAccountDetailFeign;
@@ -96,6 +99,9 @@ public class AntadStatusCheckTestController {
 	
 	@Autowired
 	private IDepositAccountDetailFeign accountDetailFeign;
+	
+	@Autowired
+	private IAntadOperationFeign antadOperationFeign;
 
 	/**
 	 * Endpoint utilizado para la funcionalidad de consulta de cuenta cheque del
@@ -352,6 +358,37 @@ public class AntadStatusCheckTestController {
 			@RequestBody @Valid CheckCheckingAccountRequest request) {
 
 		return accountDetailFeign.getAccountDetail(
+				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
+				httpHeaders.getFirst(ApiConstants.UUID), 
+				httpHeaders.getFirst(ApiConstants.ACCEPT),
+				httpHeaders.getFirst(ApiConstants.DEVICE_ID),
+				httpHeaders.getFirst(ApiConstants.CHANNEL_ID), request);
+	}
+	
+	/**
+	 * Endpoint utilizado para la funcionalidad de realizar una transferencia SPEI.
+	 * 
+	 * @param speiTransferRequest request para realizar transferencia.
+	 * @return obejct Response.
+	 */
+	@ApiIgnore
+	@ApiOperation(value = ApiConstants.MSW_RESPONSE_API, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiResponses(value = { @ApiResponse(code = ApiConstants.CODE_OK, message = ApiConstants.OK),
+			@ApiResponse(code = ApiConstants.CODE_BAD_REQUEST, message = ApiConstants.BAD_REQUEST),
+			@ApiResponse(code = ApiConstants.CODE_INTERNAL_ERROR, message = ApiConstants.INTERNAL_ERROR) })
+	@ApiImplicitParams({
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.ACCEPT),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.AUTHORIZATION),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CONTENT_TYPE),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.UUID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.CHANNEL_ID),
+			@ApiImplicitParam(required = true, paramType = Constants.HEADER_WORD_CONSTANT, name = ApiConstants.DEVICE_ID) })
+	@ValidateHeaders
+	@PostMapping(value = ApiConstants.API_ENDPOINT_MSW_RESPONSE)
+	public ResponseEntity<MswResponseResponse> sendMswResponse(@RequestHeader @ApiIgnore HttpHeaders httpHeaders,
+			@RequestBody @Valid MswResponseRequest request) {
+
+		return antadOperationFeign.sendMswResponse(
 				httpHeaders.getFirst(ApiConstants.AUTHORIZATION),
 				httpHeaders.getFirst(ApiConstants.UUID), 
 				httpHeaders.getFirst(ApiConstants.ACCEPT),

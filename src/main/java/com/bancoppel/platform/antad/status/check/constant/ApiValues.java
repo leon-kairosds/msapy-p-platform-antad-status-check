@@ -86,5 +86,25 @@ public class ApiValues {
 	
 	@Value("${constants.apiValues.values.horario}")
 	private String horario;
+	
+	@Value("${constants.apiValues.values.sucursal}")
+	private String sucursal;
+	
+	@Value("${constants.apiValues.values.caja}")
+	private String caja;
+	
+	@Value("${constants.apiValues.values.cajero}")
+	private String cajero;
+	
+	@Value("${constants.apiValues.values.numTrama}")
+	private int numTrama;
+	
+	@Value("${constants.apiValues.values.comercio}")
+	private String comercio;
 
+	@Value("${constants.apiValues.values.usuario}")
+	private String usuario;
+	
+	@Value("${constants.apiValues.values.operacion.consulta}")
+	private String operacionConsul;
 }
